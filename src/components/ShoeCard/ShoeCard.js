@@ -37,13 +37,19 @@ const ShoeCard = ({
         <ImageWrapper>
           <Image alt="" src={imageSrc} />
         </ImageWrapper>
+        {variant !== 'default' &&
+          <Badge variant={variant} />
+        }
         <Spacer size={12} />
         <Row>
           <Name>{name}</Name>
-          <Price>{formatPrice(price)}</Price>
+          <Price variant={variant}>{formatPrice(price)}</Price>
         </Row>
         <Row>
           <ColorInfo>{pluralize('Color', numOfColors)}</ColorInfo>
+          {variant === 'on-sale' &&
+            (<SalePrice>{formatPrice(salePrice)}</SalePrice>)
+          }
         </Row>
       </Wrapper>
     </Link>
@@ -61,7 +67,26 @@ const Link = styled.a`
 `;
 
 const Wrapper = styled.article`
+  position: relative;
 `;
+
+const BadgeWrapper = styled.div`
+  position: absolute;
+  top: 12px;
+  right: -4px;
+  padding: 9px;
+  border-radius: 2px;
+  color: ${COLORS.white};
+  background-color: ${p => p.variant === 'on-sale' ? COLORS.primary : COLORS.secondary};
+`
+
+const Badge = ({ variant }) => {
+  return (
+    <BadgeWrapper variant={variant}>
+      {variant === 'on-sale' ? 'Sale' : 'Just Released!'}
+    </BadgeWrapper>
+  )
+}
 
 const ImageWrapper = styled.div`
   position: relative;
@@ -69,10 +94,13 @@ const ImageWrapper = styled.div`
 
 const Image = styled.img`
   width: 100%;
+  border-radius: 16px 16px 4px 4px;
 `;
 
 const Row = styled.div`
   font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Name = styled.h3`
@@ -80,7 +108,10 @@ const Name = styled.h3`
   color: ${COLORS.gray[900]};
 `;
 
-const Price = styled.span``;
+const Price = styled.span`
+  text-decoration: ${p => p.variant === 'on-sale' && 'line-through'};
+  color: ${p => p.variant === 'on-sale' && COLORS.gray[700]};
+`;
 
 const ColorInfo = styled.p`
   color: ${COLORS.gray[700]};
