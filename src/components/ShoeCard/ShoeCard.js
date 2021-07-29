@@ -61,8 +61,6 @@ const Link = styled.a`
   color: inherit;
 
   min-width: 300px;
-  flex-basis: 400px;
-  max-width: 550px;
   flex: 1;
 `;
 
